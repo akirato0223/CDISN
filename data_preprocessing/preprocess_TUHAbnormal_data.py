@@ -380,7 +380,7 @@ class TUHAbnormalDataset(PreprocessedDataset):
 
             # save signals
             if not reject_signal:
-                pickled_file_name = (edf_file[:-4] + self.unique_temp_file_id + ".pkl")  # save pickled version of signal for later use (i.e., __getitem__ calls)
+                pickled_file_name = (edf_file[:-4] + self.unique_temp_file_id + ".npy")  # save pickled version of signal for later use (i.e., __getitem__ calls)
                 with open(pickled_file_name, "wb") as outfile:
                     pkl.dump(clean_sig, outfile)
                 good_edf_files.append(edf_file)
@@ -528,7 +528,7 @@ class TUHAbnormalDataset(PreprocessedDataset):
 
         full_signal = None
         with open(file_path, "rb") as infile:
-            full_signal = np.load(infile)
+            full_signal = np.load(infile, allow_pickle=True)
             # full_signal = full_signal[
             #     self.good_channels, :
             # ]  # index only into the channels that reliably uninterrupted across the entire dataset, as deteremined by self.filter_data()
@@ -979,9 +979,9 @@ class TUHAbnormalDataset(PreprocessedDataset):
                 if len(curr_subset) == max_num_samps_per_subset_file:
                     with open(curr_subset_save_path, "wb") as outfile:
                         # pkl.dump(curr_subset, outfile)
-                        #file_array = [[each row (each sample)], []]
+                        #file_array = [[each row (eacmple)], []]
                         file_array = np.array(curr_subset)
-                        np.save(file_array, outfile)
+                        np.save(outfile, file_array)
                         # add each row (different sampled data) in each file into dictionary with index
                         for row_idx_in_file, row in enumerate(file_array): 
                             #idx_dictionary: idx_dict = {idx: [file_name, row_ind]}
@@ -1012,8 +1012,8 @@ class TUHAbnormalDataset(PreprocessedDataset):
                 [fold_save_dir, "subset" + str(idx) + ".npy"])
                 with open(curr_subset_save_path, "wb") as final_outfile:
                     #result_final_arr includes [[curr_row], [curr_row] ..]
-                    np.save(np.array(result_final_arr), final_outfile)
-    
+                    # np.save(np.array(result_final_arr), final_outfile)
+                    np.save(final_outfile, np.array(result_final_arr))
         print("Total number of samples in subset(number of rows): ", len(idx_dictionary.keys()))
 
         return source_file_paths, num_samps_per_source_file
