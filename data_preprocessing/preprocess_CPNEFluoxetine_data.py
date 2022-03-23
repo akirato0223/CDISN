@@ -3,7 +3,7 @@
 
 # dependency import statements
 import os
-import pickle5 as pkl
+import pickle as pkl
 import argparse
 from random import shuffle, randint
 import scipy.io as scio

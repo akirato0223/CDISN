@@ -1,6 +1,6 @@
 import os
 import argparse
-import pickle5 as pkl
+import pickle as pkl
 import random
 
 from utils.caching_utils import create_directory

@@ -3,7 +3,7 @@
 
 import os
 import argparse
-import pickle5 as pkl
+import pickle as pkl
 from itertools import (
     chain,
     combinations,
