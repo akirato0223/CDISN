@@ -13,6 +13,8 @@ import numpy as np
 from sklearn.model_selection import GroupKFold
 
 from utils.caching_utils import create_directory
+from utils import create_directory
+
 
 
 class CachedDataset(torch.utils.data.Dataset):

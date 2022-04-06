@@ -6,9 +6,6 @@
 # arg.data_source_specific_args = args
 # -> cached_args["v2"] = args (do that for all 3 tasks)
 
-# with open ("data_preprocessing/cached_args_for_all_ICML2022_TUAB_experiments.pkl" wb) as infile:
-#pkl.dump("cached_args")
-
 #-> # with open ("/Users/akira/CodeProjects/updated_cdisn/data_preprocessing/cached_args_preprocess_TUHAbnormal_data.pkl" wb) as infile:
 #pkl.dump("cached_args[v2]")
 
@@ -28,12 +25,13 @@ import pickle as pkl
 import mne
 import numpy as np
 from random import shuffle, randint
-from data_preprocessing.data_preprocessing_utils import (
+import random
+from data_preprocessing_utils import (
     randomly_sample_window_from_signal,
     sample_window_from_signal_for_RP_task,
     sample_window_from_signal_for_TS_task,
 )
-from data_preprocessing.tuab_edf_utils import nedc_select_channels
+from tuab_edf_utils import nedc_select_channels
 # import pyedflib
 from tuab_edf_utils import nedc_load_edf, nedc_get_pos, nedc_apply_montage
 import uuid
@@ -997,12 +995,12 @@ class TUHAbnormalDataset(PreprocessedDataset):
 
         random_seed = 0
         #shuffle keys of rows, where a key is the number of rows starting from 0 for all the subset files)
-        random.Random(random_seed).shuffle(idx_dictionary.keys())
+        random.Random(random_seed).shuffle(list(idx_dictionary.keys()))
 
         #result_final_arr = [["file_name", row_index, row_array[]]] where row_index is the number of row in that particular file counting from the first row in the file.
         result_final_arr = []
         for idx in idx_dictionary.keys():
-            loaded_file = np.load(idx_dictionary[idx][0])
+            loaded_file = np.load(idx_dictionary[idx][0], allow_pickle=True)
             row_index = idx_dictionary[idx][1]
             curr_row = loaded_file[row_index]
             result_final_arr.append(curr_row)
